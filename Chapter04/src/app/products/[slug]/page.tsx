@@ -6,6 +6,14 @@ type Props = {
   };
 };
 
+// 다이나믹하게 메타 데이터 만드는 방법
+// title 태그가 변경되는 것을 확인할 수 있다
+export function generateMetadata({ params }: Props) {
+  return {
+    title: `제품의 이름 ${params.slug}`,
+  };
+}
+
 const PantsPage = ({ params }: Props) => {
   if (params.slug === 'nothing') {
     notFound(); // not-found.tsx로 이동한다
@@ -21,9 +29,3 @@ export function generateStaticParams() {
     slug: product,
   }));
 }
-
-/**
- * 미리 만들어주고 싶은 페이지를 미리 명시해줄 수 있다
- * In the app directory, getStaticPaths is replaced with generateStaticParams.
- * build 해주면 /products/pants , /products/skirt 두 페이지가 SSG로 만들어진 것을 확인할 수 있다
- */

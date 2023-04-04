@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import './globals.css';
 import styles from './layout.module.css';
+
+// 페이지 이동해도 head에 아래 정보에 해당하는 태그가 있는 것을 확인할 수 있다
+export const metadata = {
+  title: '제품 사이트',
+  description: '제품을 판매하는 곳',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -29,5 +39,14 @@ export default function RootLayout({
   );
 }
 
-// A layout is UI that is shared between routes.
-// /contact, /product로 이동해도 공통으로 위에 정의한 header 부분 존재한다
+/**
+ * yarn add next@13.1.7-canary.11
+ * 각각의 페이지에 title과 description을 정으해줄 수 있기 때문에 크롤러가 SEO를 잘 할 수 있다
+ * Metadata page에 넣으면 해당 페이지에만 적용되지만
+ * Layout 파일에 넣으면 해당 페이지와 서브 라우트에도 모두 적용된다
+ *
+ * head.ts 파일 대신 metadata 사용한다
+ *
+ * https://beta.nextjs.org/docs/guides/seo
+ * https://beta.nextjs.org/docs/api-reference/metadata
+ */

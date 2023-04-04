@@ -1,5 +1,15 @@
 import Link from 'next/link';
 import styles from './layout.module.css';
+import { Metadata } from 'next';
+
+/**
+ * products 페이지 이동하면 아래 데이터에 해당 하는 태그 있는 것을 확인할 수 있다
+ */
+
+export const metadata: Metadata = {
+  title: '제품 사이트 | 전체 제품 확인',
+  description: '제품을 확인하는 곳',
+};
 
 export default function ProductsLayout({
   children,
@@ -16,8 +26,3 @@ export default function ProductsLayout({
     </>
   );
 }
-
-/**
- * product 경로 안에서 공통의 컴포넌트를 만드는 방법
- * layout.tsx 파일을 만들어주면 된다
- */
