@@ -10,7 +10,15 @@ const PantsPage = ({ params }: Props) => {
 
 export default PantsPage;
 
+export function generateStaticParams() {
+  const products = ['pants', 'skirt'];
+  return products.map((product) => ({
+    slug: product,
+  }));
+}
+
 /**
- * 동적 라우팅은, 기본 페이지는 정적으로 미리 서버에서 만들어주지만
- * params 같이 동적인 부분은 SSR처럼 만들어져서 브라우저에 보내진다
+ * 미리 만들어주고 싶은 페이지를 미리 명시해줄 수 있다
+ * In the app directory, getStaticPaths is replaced with generateStaticParams.
+ * build 해주면 /products/pants , /products/skirt 두 페이지가 SSG로 만들어진 것을 확인할 수 있다
  */
