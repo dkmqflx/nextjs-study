@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 type Props = {
   params: {
     slug: string;
@@ -5,6 +7,9 @@ type Props = {
 };
 
 const PantsPage = ({ params }: Props) => {
+  if (params.slug === 'nothing') {
+    notFound(); // not-found.tsx로 이동한다
+  }
   return <div>{params.slug}</div>;
 };
 
