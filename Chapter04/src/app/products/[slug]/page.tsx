@@ -1,4 +1,5 @@
 import { getProduct, getProducts } from '@/service/producs';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 type Props = {
@@ -29,7 +30,17 @@ const ProductsPage = async ({ params: { slug } }: Props) => {
     notFound();
   }
   // 서버 팡리에 있는데이터 중 해당 제품의 정보를 찾아서 그걸 보여주도록 한다
-  return <div>{product.name}</div>;
+  return (
+    <>
+      <h1>{product.name} : 제품 설명 페이지</h1>
+      <Image
+        src={`/images/${product.image}`}
+        alt={product.name}
+        width={300}
+        height={300}
+      />
+    </>
+  );
 };
 
 export default ProductsPage;
