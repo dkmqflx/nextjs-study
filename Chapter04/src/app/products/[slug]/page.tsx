@@ -1,6 +1,7 @@
+import GoProductsButton from '@/components/GoProductsButton';
 import { getProduct, getProducts } from '@/service/producs';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 type Props = {
   params: {
@@ -27,7 +28,8 @@ const ProductsPage = async ({ params: { slug } }: Props) => {
   const product = await getProduct(slug);
 
   if (!product) {
-    notFound();
+    // notFound();
+    redirect('/products'); // 동적으로 redirect
   }
   // 서버 팡리에 있는데이터 중 해당 제품의 정보를 찾아서 그걸 보여주도록 한다
   return (
@@ -39,6 +41,8 @@ const ProductsPage = async ({ params: { slug } }: Props) => {
         width={300}
         height={300}
       />
+      {/* 서버 컴포넌트는 아래처럼 버튼 클릭 이벤트 처리할 수 없기 때문에 클라이언트 컴포넌트로 빼주는 작업이 필요하다  */}
+      <GoProductsButton></GoProductsButton>
     </>
   );
 };
