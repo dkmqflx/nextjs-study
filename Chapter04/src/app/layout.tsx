@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import './globals.css';
 import styles from './layout.module.css';
+import { Nanum_Gothic, Open_Sans } from '@next/font/google';
 
-// 페이지 이동해도 head에 아래 정보에 해당하는 태그가 있는 것을 확인할 수 있다
+const sans = Open_Sans({ subsets: ['latin'] });
+const gothic = Nanum_Gothic({ weight: '700', subsets: ['latin'] });
+
 export const metadata = {
   title: '제품 사이트',
   description: '제품을 판매하는 곳',
@@ -17,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' className={sans.className}>
       {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
@@ -25,7 +28,7 @@ export default function RootLayout({
       <head />
       <body>
         <header className={styles.header}>
-          <h1>Demo Note</h1>
+          <h1 className={gothic.className}>Demo Note</h1>
           <nav className={styles.nav}>
             <Link href='/contact'>Contact</Link>
             <Link href='/about'>About</Link>
