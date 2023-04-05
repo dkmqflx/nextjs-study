@@ -19,6 +19,8 @@ export function generateMetadata({ params }: Props) {
  * https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md
  */
 
+export const revalidate = 3;
+
 const ProductsPage = async ({ params: { slug } }: Props) => {
   console.log('slug', slug);
   const product = await getProduct(slug);

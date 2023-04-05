@@ -1,7 +1,9 @@
 import { getProducts } from '@/service/producs';
 import Link from 'next/link';
 
-const products = ['shirt', 'pants', 'skirt', 'shoes'];
+export const revalidate = 3;
+// 데이터 수정 후, 3초 후에 새로고침하면 이전에 캐시된 페이지 보내주지만
+// 한번 더 새로고침하면 값 변경되어있는 것 확인할 수 있다
 
 export default async function ProductsPage() {
   // 서버 파일(데이터베이스)에 있는 제품의 리스트를 읽어와서, 그걸 보여주도록 한다
