@@ -3,7 +3,7 @@ import styles from './layout.module.css';
 import { Metadata } from 'next';
 
 /**
- * products 페이지 이동하면 아래 데이터에 해당 하는 태그 있는 것을 확인할 수 있다
+ * loading.tsx 사용하면 children 컴포넌트 부분을 리액트 suspense로 감싸준다
  */
 
 export const metadata: Metadata = {

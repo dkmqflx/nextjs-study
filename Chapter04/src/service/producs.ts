@@ -8,7 +8,6 @@ export type Product = {
 };
 
 export async function getProducts(): Promise<Product[]> {
-  // node에서 제공하는 모듈들 사용
   const filePath = path.join(process.cwd(), 'data', 'products.json');
   const data = await fs.readFile(filePath, 'utf-8');
 
