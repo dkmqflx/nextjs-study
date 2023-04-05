@@ -1,3 +1,4 @@
+import { getProduct, getProducts } from '@/service/producs';
 import { notFound } from 'next/navigation';
 
 type Props = {
@@ -6,25 +7,27 @@ type Props = {
   };
 };
 
-// 다이나믹하게 메타 데이터 만드는 방법
-// title 태그가 변경되는 것을 확인할 수 있다
 export function generateMetadata({ params }: Props) {
   return {
     title: `제품의 이름 ${params.slug}`,
   };
 }
 
-const PantsPage = ({ params }: Props) => {
-  if (params.slug === 'nothing') {
-    notFound(); // not-found.tsx로 이동한다
+const PantsPage = ({ params: { slug } }: Props) => {
+  const product = getProduct(slug);
+
+  if (!product) {
+    notFound();
   }
-  return <div>{params.slug}</div>;
+  // 서버 팡리에 있는데이터 중 해당 제품의 정보를 찾아서 그걸 보여주도록 한다
+  return <div>{product}</div>;
 };
 
 export default PantsPage;
 
 export function generateStaticParams() {
-  const products = ['pants', 'skirt'];
+  // 모든 제품의 페이지를 미리 만들어 둘 수 있도록 한다 (SSG)
+  const products = getProducts();
   return products.map((product) => ({
     slug: product,
   }));
