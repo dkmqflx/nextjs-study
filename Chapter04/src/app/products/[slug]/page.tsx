@@ -13,22 +13,36 @@ export function generateMetadata({ params }: Props) {
   };
 }
 
-const PantsPage = ({ params: { slug } }: Props) => {
-  const product = getProduct(slug);
+/**
+ * 서버 컴포넌트는 async 함수로 정의 가능(즉, 서버 컴포넌트를 async 함수로 정의 하는 것은 전혀 이상하지 않음)
+ * 다만, 서버 컴포넌트 "자체"가 아직은 실험적 기능으로 자주 보이는 패턴이 아님
+ * https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md
+ */
+
+const ProductsPage = async ({ params: { slug } }: Props) => {
+  console.log('slug', slug);
+  const product = await getProduct(slug);
 
   if (!product) {
     notFound();
   }
   // 서버 팡리에 있는데이터 중 해당 제품의 정보를 찾아서 그걸 보여주도록 한다
-  return <div>{product}</div>;
+  return <div>{product.name}</div>;
 };
 
-export default PantsPage;
+export default ProductsPage;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   // 모든 제품의 페이지를 미리 만들어 둘 수 있도록 한다 (SSG)
-  const products = getProducts();
+  // yarn build하고 .next/server/app/products 보면 html 파일들 만들어진 것 확인할 수 있다
+  const products = await getProducts();
+  console.log('generateStaticParams - products', products);
   return products.map((product) => ({
-    slug: product,
+    slug: product.id,
   }));
 }
+
+/**
+ * The generateStaticParams function can be used in combination with dynamic route segments
+ * to statically generate routes at build time instead of on-demand at request time.
+ */
