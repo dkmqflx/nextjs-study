@@ -3,6 +3,7 @@ import { Open_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+// 폰트 지정
 const sans = Open_Sans({ subsets: ['latin'] });
 
 export const metadata = {
@@ -25,3 +26,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+// 기본적인 골격 잡기 위한 파일

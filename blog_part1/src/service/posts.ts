@@ -23,12 +23,13 @@ export async function getNonFeaturedPosts(): Promise<Post[]> {
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-  const filePath = path.join(process.cwd(), 'data', 'posts.json');
-  return readFile(filePath, 'utf-8')
-    .then<Post[]>(JSON.parse)
-    .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1)));
+  const filePath = path.join(process.cwd(), 'data', 'posts.json'); // process.cwd : 절대경로
+  return readFile(filePath, 'utf-8') // utf-8은 인코딩 방법
+    .then<Post[]>(JSON.parse) // data => JSON.parse(data) 처럼 전달되는 인자 같으면 생략가능
+    .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1))); // 날짜형태로, 최신 포스트 가장 먼저 오도록 정렬
 }
 
+// 인자로 전달된 fileName을 통해서 해당 파일을 읽어온다
 export async function getPostData(fileName: string): Promise<PostData> {
   const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
   const metadata = await getAllPosts() //

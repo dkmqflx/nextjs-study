@@ -1,5 +1,5 @@
 'use client';
-import Carousel from 'react-multi-carousel';
+import Carousel from 'react-multi-carousel'; // 외부 라이브러리 사용
 import 'react-multi-carousel/lib/styles.css';
 const responsive = {
   superLargeDesktop: {
