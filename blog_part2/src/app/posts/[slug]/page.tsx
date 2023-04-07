@@ -10,6 +10,9 @@ type Props = {
   };
 };
 
+// head 태그에서 아래 내용을 확인할 수 있다
+// dynamic 하게 title과 description 변경할 수 있다
+// 포스트 변경될 때 마다 title과 description도 변경된다
 export async function generateMetadata({
   params: { slug },
 }: Props): Promise<Metadata> {
@@ -42,6 +45,8 @@ export default async function PostPage({ params: { slug } }: Props) {
   );
 }
 
+// 모든 페이지에 대해서 SSR하는 것이 아니라 사람들이 많이모든, 내가 원하는 slug에 한해서 미리 페이지를 만들어준다
+// yarn build 하면 해당 페이지는 미리 만들어진 것을 확인할 수 있다
 export async function generateStaticParams() {
   const posts = await getFeaturedPosts();
   return posts.map((post) => ({

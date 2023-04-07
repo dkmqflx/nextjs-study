@@ -1,6 +1,8 @@
 import Hero from '@/components/Hero';
 import { Metadata } from 'next';
 
+// head 태그에서 아래 내용을 확인할 수 있다
+
 export const metadata: Metadata = {
   title: 'About Me',
   description: 'Ellie 커리어 소개',

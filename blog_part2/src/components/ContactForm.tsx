@@ -1,4 +1,5 @@
 'use client';
+//상태도 있고 사용자의 입력도 있기 때문에 클라이언트 컴포넌트여야 한다
 
 import { sendContactEmail } from '@/service/contact';
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -32,7 +33,7 @@ export default function ContactForm() {
           message: '메일을 성공적으로 보냈습니다.',
           state: 'success',
         });
-        setForm(DEFAULT_DATA);
+        setForm(DEFAULT_DATA); // 성공적으로 보내면 초기화해준다
       })
       .catch((error) => {
         setBanner({

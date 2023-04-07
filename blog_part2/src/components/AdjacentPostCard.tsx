@@ -8,6 +8,7 @@ type Props = {
   type: 'prev' | 'next';
 };
 
+// 이렇게 정의해주면, 여기서 바꾸면 해당 부분을 사용하는 모든 곳에서 바뀐 스타일이 적용된다
 const ICON_CLASS =
   'text-5xl m-4 text-yellow-300 transition-all group-hover:text-6xl';
 

@@ -1,6 +1,12 @@
 'use client';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+/**
+ * 외부 라이브러리를 사용할 때, 이렇게 별도의 컴포넌트로 분리하면
+ * 라이브러리에 대한 책임을 한단계 감싸주면
+ * 라이브러리를 교체할 때 해당 컴포넌트에서만 수정을 해주면 되낟
+ */
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
