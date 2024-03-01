@@ -1,6 +1,6 @@
-import { readFile } from 'fs/promises';
-import path from 'path';
-import { cache } from 'react';
+import { readFile } from "fs/promises";
+import path from "path";
+import { cache } from "react";
 
 export type Post = {
   title: string;
@@ -49,15 +49,15 @@ export async function getNonFeaturedPosts(): Promise<Post[]> {
  */
 
 export const getAllPosts = cache(async () => {
-  console.log('getAllPosts');
-  const filePath = path.join(process.cwd(), 'data', 'posts.json');
-  return readFile(filePath, 'utf-8')
+  console.log("getAllPosts");
+  const filePath = path.join(process.cwd(), "data", "posts.json");
+  return readFile(filePath, "utf-8")
     .then<Post[]>(JSON.parse)
     .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1)));
 });
 
 export async function getPostData(fileName: string): Promise<PostData> {
-  const filePath = path.join(process.cwd(), 'data', 'posts', `${fileName}.md`);
+  const filePath = path.join(process.cwd(), "data", "posts", `${fileName}.md`);
   const posts = await getAllPosts();
   const post = posts.find((post) => post.path === fileName);
 
@@ -65,8 +65,8 @@ export async function getPostData(fileName: string): Promise<PostData> {
 
   const index = posts.indexOf(post);
   const next = index > 0 ? posts[index - 1] : null;
-  const prev = index < posts.length ? posts[index + 1] : null;
-  const content = await readFile(filePath, 'utf-8');
+  const prev = index < posts.length - 1 ? posts[index + 1] : null;
+  const content = await readFile(filePath, "utf-8");
 
   // post: 메타 데이터
   // content: 해당 포스트에 해당하는 content
