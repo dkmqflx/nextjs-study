@@ -25,6 +25,11 @@ const authOptions: NextAuthOptions = {
         return false;
       }
 
+      /**
+       * 프론트에서 바로 Content Lake에 접근하는 것이 아니라
+       * 백엔드에서 addUser라는 함수를 실행해서 Content Lake에 접근하도록 한다
+       */
+
       addUser({
         id,
         name: name || "",
@@ -55,3 +60,9 @@ const authOptions: NextAuthOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST, authOptions };
+
+/**
+ * Next.js는 풀스택 프레임워크로
+ * 이렇게 Route handler 를 등록함으로써
+ * 서버상에서 로그인에 관련된 다양한 API를 실행할 수 있게 된다
+ */
