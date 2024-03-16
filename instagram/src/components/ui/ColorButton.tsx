@@ -26,4 +26,8 @@ export default function ColorButton({ text, onClick }: Props) {
  *
  * -> 어차피 onClick을 전달하는 컴포넌트는 무조건 클라이언트가 될 것이기 때문에,
  * 굳이 한번 더 선언하지 않은 것 같다
+ *
+ * -> 정확하게 말하면 이 컴포넌트는 서버 컴포넌트이지만
+ * 지금 사용하는 것 처럼 클라이언트 컴포넌트 내부에서 import 하면 클라이언트 컴포넌트가 되고
+ * children으로 전달을 하면 서버 컴포넌트가 되는 것이다
  */
