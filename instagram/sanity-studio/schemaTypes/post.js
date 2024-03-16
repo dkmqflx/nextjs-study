@@ -59,6 +59,7 @@ export default {
       authorUsername: 'author.username',
       media: 'photo',
     },
+    // 위에서 select한 데이터가 selection이라는 인자로 전달된다
     prepare(selection) {
       const {title, authorName, authorUsername, media} = selection
       return {
