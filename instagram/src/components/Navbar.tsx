@@ -34,6 +34,7 @@ const menu = [
 export default function Navbar() {
   const pathName = usePathname();
   const { data: session } = useSession();
+  // 서버 컴포넌트와 달리 클라이언트 컴포넌트에서는 useSession이라는 훅을 사용해서 세션 정보를 받아올 수 있다.
   const user = session?.user;
 
   return (
@@ -54,7 +55,7 @@ export default function Navbar() {
           {user && (
             <li>
               <Link href={`/user/${user.username}`}>
-                <Avatar image={user.image} />
+                <Avatar image={user.image} size="small" highlight />
               </Link>
             </li>
           )}

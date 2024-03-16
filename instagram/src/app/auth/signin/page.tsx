@@ -15,6 +15,7 @@ export default async function SignPage({
   searchParams: { callbackUrl },
 }: Props) {
   const session = await getServerSession(authOptions);
+  // 서버 컴포넌트에서는 getServerSession이라는 함수를 통해서 세션 정보를 가져올 수 있다
 
   // 현재 로그인을 했다면 리다이렉트 시켜준다
   if (session) {
