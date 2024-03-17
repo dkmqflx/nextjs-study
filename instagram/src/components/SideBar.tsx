@@ -4,6 +4,8 @@ import Avatar from "./Avatar";
 type Props = {
   user: User;
 };
+
+// 사이드바는 서버 컴포넌트로, props로 받아온 데이터를 보여주는 정적인 컴포넌트
 export default function SideBar({ user: { name, username, image } }: Props) {
   return (
     <>
