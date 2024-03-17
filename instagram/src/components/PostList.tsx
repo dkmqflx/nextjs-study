@@ -1,6 +1,8 @@
 "use client";
 import { SimplePost } from "@/model/post";
 import useSWR from "swr";
+import { GridLoader } from "react-spinners";
+import PostListCard from "./PostListCard";
 
 export default function PostList() {
   const { data: posts, isLoading: loading } =
@@ -8,6 +10,22 @@ export default function PostList() {
   console.log(posts);
 
   return (
-    <ul>{posts && posts.map((post) => <li key={post.id}>{post.text}</li>)}</ul>
+    <section>
+      {loading && (
+        <div>
+          <GridLoader color="red" />
+        </div>
+      )}
+
+      {posts && (
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id}>
+              <PostListCard post={post} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
