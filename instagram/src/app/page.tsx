@@ -17,7 +17,7 @@ export default async function HomePage() {
 
   return (
     <section className="w-full flex flex-col md:flex-row max-w-[850px] p-4">
-      <div className="w-full basis-3/4">
+      <div className="w-full basis-3/4 min-w-0">
         {/* 
         FollowingBar와 PostList에서 필요한 데이터는 
         로그인한 사용자의 세션정보를 통해서 누구를 팔로우 했는지, 포스트가 무엇인지를 알기 힘들다
@@ -37,7 +37,7 @@ export default async function HomePage() {
         <PostList />
       </div>
 
-      <div className="basis-1/4">
+      <div className="basis-1/4 ml-8">
         <SideBar user={user} />
       </div>
     </section>
