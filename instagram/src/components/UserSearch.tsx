@@ -1,5 +1,6 @@
 "use client";
 
+import useDebounce from "@/hooks/debounce";
 import { ProfileUser } from "@/model/user";
 import { FormEvent, useState } from "react";
 import useSWR from "swr";
@@ -8,11 +9,12 @@ import UserCard from "./UserCard";
 
 export default function UserSearch() {
   const [keyword, setKeyword] = useState("");
+  const debouncedKeyword = useDebounce(keyword);
   const {
     data: users,
     isLoading,
     error,
-  } = useSWR<ProfileUser[]>(`/api/search/${keyword}`);
+  } = useSWR<ProfileUser[]>(`/api/search/${debouncedKeyword}`);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -29,15 +31,11 @@ export default function UserSearch() {
           onChange={(e) => setKeyword(e.target.value)}
         />
       </form>
-
       {error && <p>무언가가 잘못 되었음 😜</p>}
-
       {isLoading && <GridSpinner />}
-
       {!isLoading && !error && users?.length === 0 && (
         <p>찾는 사용자가 없음 😭</p>
       )}
-
       <ul className="w-full p-4">
         {users &&
           users.map((user) => (
