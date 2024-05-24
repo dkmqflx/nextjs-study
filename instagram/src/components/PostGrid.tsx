@@ -16,14 +16,14 @@ export default function PostGrid({ username, query }: Props) {
   } = useSWR<SimplePost[]>(`/api/users/${username}/${query}`);
 
   return (
-    <div>
+    <div className="w-full text-center">
       {isLoading && <GridSpinner />}
-      <ul>
+
+      <ul className="grid grid-cols-3 gap-4 py-4 px-8">
         {posts &&
           posts.map((post, index) => (
             <li key={post.id}>
               <PostGridCard post={post} priority={index < 6} />
-              {/* 앞부분 6개까지 이미지는 priority를 가진다 */}
             </li>
           ))}
       </ul>
