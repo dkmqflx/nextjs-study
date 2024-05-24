@@ -45,3 +45,43 @@ export async function getPost(id: string) {
     )
     .then((post) => ({ ...post, image: urlFor(post.image) }));
 }
+
+export async function getPostsOf(username: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && author->username == "${username}"]
+      | order(_createdAt desc){
+        ${simplePostProjection}
+      }`
+    ) // 최신순으로 정렬해서 가져오도록 한다
+    .then(mapPosts);
+}
+
+export async function getLikedPostsOf(username: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && "${username}" in likes[]->username]
+      | order(_createdAt desc){
+        ${simplePostProjection}
+      }`
+    )
+    .then(mapPosts);
+}
+
+export async function getSavedPostsOf(username: string) {
+  return client
+    .fetch(
+      `*[_type == "post" && _id in *[_type=="user" && username=="${username}"].bookmarks[]._ref]
+      | order(_createdAt desc){
+        ${simplePostProjection}
+      }`
+    )
+    .then(mapPosts);
+}
+
+function mapPosts(posts: SimplePost[]) {
+  return posts.map((post: SimplePost) => ({
+    ...post,
+    image: urlFor(post.image),
+  }));
+}
