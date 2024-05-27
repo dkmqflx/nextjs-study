@@ -5,28 +5,44 @@ import { useState } from "react";
 import ToggleButton from "./ui/ToggleButton";
 import HeartFillIcon from "./ui/icons/HeartFillIcon";
 import BookmarkFillIcon from "./ui/icons/BookmarkFillIcon";
+import { SimplePost } from "@/model/post";
+import { useSession } from "next-auth/react";
+import { useSWRConfig } from "swr";
 
 type Props = {
-  likes: string[];
-  username: string;
-  createdAt: string;
-  text?: string;
+  post: SimplePost;
 };
 
-export default function ActionBar({ likes, username, text, createdAt }: Props) {
-  const [liked, setLiked] = useState(false);
+export default function ActionBar({ post }: Props) {
+  const { id, likes, username, text, createdAt } = post;
+  console.log("post", post);
+
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const liked = user ? likes.includes(user.username) : false;
+
   const [bookmarked, setBookmarked] = useState(false);
+  const { mutate } = useSWRConfig();
+
+  const handleLike = (like: boolean) => {
+    fetch("api/likes", {
+      method: "PUT",
+      body: JSON.stringify({ id, like }),
+    }).then(() => mutate("/api/posts"));
+    // mutate 해주는 이유는, Detail 팝업에서 좋아요 클릭해도, PostList에서 반영이 안되기 때문
+    // 그 이유는 SWR에서 받아온 데이터를 그대로 캐싱해서 보여주기 때문이다
+  };
 
   return (
     <>
       <div className="flex justify-between my-2 px-4">
         <ToggleButton
           toggled={liked}
-          onToggle={setLiked}
+          onToggle={handleLike}
           onIcon={<HeartFillIcon />}
           offIcon={<HeartIcon />}
         />
-
         <ToggleButton
           toggled={bookmarked}
           onToggle={setBookmarked}

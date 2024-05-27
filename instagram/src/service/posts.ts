@@ -24,9 +24,7 @@ export async function getFollowingPostsOf(username: string) {
           ${simplePostProjection}
         }`
     )
-    .then((posts) =>
-      posts.map((post: SimplePost) => ({ ...post, image: urlFor(post.image) }))
-    );
+    .then(mapPosts);
 }
 
 export async function getPost(id: string) {
@@ -82,6 +80,7 @@ export async function getSavedPostsOf(username: string) {
 function mapPosts(posts: SimplePost[]) {
   return posts.map((post: SimplePost) => ({
     ...post,
+    likes: post.likes ?? [],
     image: urlFor(post.image),
   }));
 }
