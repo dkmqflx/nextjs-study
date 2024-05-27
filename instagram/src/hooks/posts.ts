@@ -1,4 +1,4 @@
-import { SimplePost } from "@/model/post";
+import { Comment, SimplePost } from "@/model/post";
 import useSWR from "swr";
 
 async function updateLike(id: string, like: boolean) {
@@ -40,21 +40,19 @@ export default function usePosts() {
     });
   };
 
-  // 포스트를 추가하는 함수
-  const postComment = (post: SimplePost, comment: string) => {
+  const postComment = (post: SimplePost, comment: Comment) => {
     const newPost = {
       ...post,
       comments: post.comments + 1,
     };
     const newPosts = posts?.map((p) => (p.id === post.id ? newPost : p));
 
-    return mutate(addComment(post.id, comment), {
+    return mutate(addComment(post.id, comment.comment), {
       optimisticData: newPosts,
       populateCache: false,
       revalidate: false,
       rollbackOnError: true,
     });
   };
-
   return { posts, isLoading, error, setLike, postComment };
 }
