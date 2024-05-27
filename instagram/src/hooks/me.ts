@@ -1,4 +1,6 @@
+import { SimplePost } from "@/model/post";
 import { HomeUser } from "@/model/user";
+import { useCallback } from "react";
 import useSWR from "swr";
 
 async function updateBookmark(postId: string, bookmark: boolean) {
@@ -11,24 +13,26 @@ async function updateBookmark(postId: string, bookmark: boolean) {
 export default function useMe() {
   const { data: user, isLoading, error, mutate } = useSWR<HomeUser>("/api/me");
 
-  const setBookmark = (postId: string, bookmark: boolean) => {
-    if (!user) return;
+  // 리렌더링 방지하기 위해 useCallback으로 감싸준다
+  const setBookmark = useCallback(
+    (postId: string, bookmark: boolean) => {
+      if (!user) return;
+      const bookmarks = user.bookmarks;
+      const newUser = {
+        ...user,
+        bookmarks: bookmark
+          ? [...bookmarks, postId]
+          : bookmarks.filter((b) => b !== postId),
+      };
 
-    const bookmarks = user.bookmarks;
-
-    const newUser = {
-      ...user,
-      bookmarks: bookmark
-        ? [...bookmarks, postId]
-        : bookmarks.filter((b) => b !== postId),
-    };
-
-    return mutate(updateBookmark(postId, bookmark), {
-      optimisticData: newUser,
-      populateCache: false,
-      revalidate: false,
-      rollbackOnError: true,
-    });
-  };
+      return mutate(updateBookmark(postId, bookmark), {
+        optimisticData: newUser,
+        populateCache: false,
+        revalidate: false,
+        rollbackOnError: true,
+      });
+    },
+    [user, mutate]
+  );
   return { user, isLoading, error, setBookmark };
 }
