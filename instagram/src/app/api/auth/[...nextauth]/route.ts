@@ -41,18 +41,28 @@ const authOptions: NextAuthOptions = {
     },
 
     // signIn이 실행된 다음에 실행된다
-    async session({ session }) {
+    async session({ session, token }) {
       // Send properties to the client, like an access_token and user id from a provider.
       const user = session?.user;
 
       // 로그인한 유저가 있다면
+      // 토큰에 id가 추가된다
       if (user) {
         session.user = {
           ...user,
           username: user.email?.split("@")[0] || "",
+          id: token.id as string,
         };
       }
       return session;
+    },
+
+    // jwt이 만들어지거나 업데이트 되면 실행되는 콜백함수
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
     },
   },
 };
