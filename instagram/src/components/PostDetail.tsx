@@ -14,12 +14,10 @@ export default function PostDetail({ post }: Props) {
   const { id, userImage, username, image, createdAt, likes } = post;
   const { data } = userSWR<FullPost>(`/api/posts/${id}`);
   const comments = data?.comments;
-
+  const handlePostComment = (comment: string) => {};
   return (
     <section className="flex w-full h-full">
       <div className="relative basis-3/5">
-        {/* Image에 fill을 사용한 경우 static이 아닌 태그를 부모 태그로 지정하기 때문에
-          위의 relative를 지정해준 것 */}
         <Image
           className="object-cover"
           src={image}
@@ -43,7 +41,6 @@ export default function PostDetail({ post }: Props) {
                     size="small"
                     highlight={commentUsername === username}
                   />
-
                   <div className="ml-2">
                     <span className="font-bold mr-1">{commentUsername}</span>
                     <span>{comment}</span>
@@ -55,7 +52,7 @@ export default function PostDetail({ post }: Props) {
 
         <ActionBar post={post} />
 
-        <CommentForm />
+        <CommentForm onPostComment={handlePostComment} />
       </div>
     </section>
   );
