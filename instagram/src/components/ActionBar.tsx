@@ -9,29 +9,28 @@ import { SimplePost } from "@/model/post";
 import { useSession } from "next-auth/react";
 import { useSWRConfig } from "swr";
 
+import usePosts from "@/hooks/posts";
+
 type Props = {
   post: SimplePost;
 };
 
 export default function ActionBar({ post }: Props) {
   const { id, likes, username, text, createdAt } = post;
-  console.log("post", post);
-
   const { data: session } = useSession();
   const user = session?.user;
 
+  // likes 안에 현재 로그인한 사용자 정보가 있는지 없는지 확인
   const liked = user ? likes.includes(user.username) : false;
 
   const [bookmarked, setBookmarked] = useState(false);
-  const { mutate } = useSWRConfig();
+
+  const { setLike } = usePosts();
 
   const handleLike = (like: boolean) => {
-    fetch("api/likes", {
-      method: "PUT",
-      body: JSON.stringify({ id, like }),
-    }).then(() => mutate("/api/posts"));
-    // mutate 해주는 이유는, Detail 팝업에서 좋아요 클릭해도, PostList에서 반영이 안되기 때문
-    // 그 이유는 SWR에서 받아온 데이터를 그대로 캐싱해서 보여주기 때문이다
+    if (user) {
+      setLike(post, user.username, like);
+    }
   };
 
   return (
