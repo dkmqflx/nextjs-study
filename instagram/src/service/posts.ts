@@ -1,5 +1,5 @@
 import { SimplePost } from "./../model/post";
-import { client, urlFor } from "./sanity";
+import { client, urlFor, assetsURL } from "./sanity";
 
 const simplePostProjection = `
     ...,
@@ -50,7 +50,11 @@ export async function getPostsOf(username: string) {
       `*[_type == "post" && author->username == "${username}"]
       | order(_createdAt desc){
         ${simplePostProjection}
-      }`
+      }`,
+      {},
+      {
+        cache: "no-cache",
+      }
     ) // 최신순으로 정렬해서 가져오도록 한다
     .then(mapPosts);
 }
@@ -130,4 +134,38 @@ export async function addComment(
       },
     ])
     .commit({ autoGenerateArrayKeys: true });
+}
+
+// 이미지 업로드 하는 함수
+// 강의 기준으로 app 폴더내 api 라우트에서 공식문서처럼 node 환경의 upload 사용할 수 없어서 아래와 같이 처리해주었다
+// https://www.sanity.io/docs/assets#41e1c8101a47
+export async function createPost(userId: string, text: string, file: Blob) {
+  console.log(userId, text, file);
+
+  return fetch(assetsURL, {
+    method: "POST",
+    headers: {
+      "content-type": file.type,
+      authorization: `Bearer ${process.env.SANITY_SECRET_TOKEN}`,
+    },
+    body: file,
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      return client.create(
+        {
+          _type: "post",
+          author: { _ref: userId },
+          photo: { asset: { _ref: result.document._id } },
+          comments: [
+            {
+              comment: text,
+              author: { _ref: userId, _type: "reference" },
+            },
+          ],
+          likes: [],
+        },
+        { autoGenerateArrayKeys: true }
+      );
+    });
 }
