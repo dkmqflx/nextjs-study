@@ -1,10 +1,12 @@
 "use client";
 import { AuthUser } from "@/model/user";
-import { ChangeEvent, DragEvent, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, DragEvent, FormEvent, useRef, useState } from "react";
 import PostUserAvatar from "./PostUserAvatar";
 import Button from "./ui/Button";
+import GridSpinner from "./ui/GridSpinner";
 import FilesIcon from "./ui/icons/FilesIcon";
-import Image from "next/image";
 
 type Props = {
   user: AuthUser;
@@ -13,8 +15,12 @@ type Props = {
 export default function NewPost({ user: { username, image } }: Props) {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
-  // 사용자가 드래그앤드롭이 아닌 클릭해서 이미지를 업로드할 수 도 있기 때문
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const router = useRouter();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -22,7 +28,6 @@ export default function NewPost({ user: { username, image } }: Props) {
 
     if (files && files[0]) {
       setFile(files[0]);
-      console.log(files[0]);
     }
   };
 
@@ -36,27 +41,64 @@ export default function NewPost({ user: { username, image } }: Props) {
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
-    // 파일을 드롭해서 가지고 있을 때 브라우저에서 자동으로 해당 파일을 브라우저에서 열려고 하는데 이를 막기 위한 것
   };
 
   const handleDrop = (e: DragEvent) => {
-    e.preventDefault(); // 브라우저의 기본 행동을 막고
+    e.preventDefault();
 
-    setDragging(false); // 상태를 변경시켜준 다음
+    setDragging(false);
 
-    const files = e.dataTransfer?.files; // 파일이 있는지 확인
+    const files = e.dataTransfer?.files;
 
     if (files && files[0]) {
       setFile(files[0]);
-      console.log(files[0]);
     }
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!file) return;
+
+    setLoading(true);
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    formData.append("text", textRef.current?.value ?? "");
+    // 사용자가 입력한 텍스트
+    // state로 처리하면 사용자가 입력할 때 마다 리렌더링이 일어나서 이미지지가 깜빡거리는 현상이 일어나므로 ref 사용
+
+    fetch("/api/posts/", { method: "POST", body: formData }) //
+      .then((res) => {
+        if (!res.ok) {
+          setError(`${res.status} ${res.statusText}`);
+          return;
+        }
+        router.push("/");
+      })
+      .catch((err) => setError(err.toString()))
+      .finally(() => setLoading(false));
   };
 
   return (
     <section className="w-full max-w-xl flex flex-col items-center mt-6">
+      {loading && (
+        <div className="absolute inset-0 z-20 text-center pt-[30%] bg-sky-500/20">
+          <GridSpinner />
+        </div>
+      )}
+
+      {error && (
+        <p className="w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold">
+          {error}
+        </p>
+      )}
+
       <PostUserAvatar username={username} image={image ?? ""} />
 
-      <form className="w-full flex flex-col mt-2">
+      <form className="w-full flex flex-col mt-2" onSubmit={handleSubmit}>
         <input
           className="hidden"
           name="input"
@@ -107,6 +149,7 @@ export default function NewPost({ user: { username, image } }: Props) {
           required
           rows={10}
           placeholder={"Write a caption..."}
+          ref={textRef}
         />
 
         <Button text="Publish" onClick={() => {}} />
