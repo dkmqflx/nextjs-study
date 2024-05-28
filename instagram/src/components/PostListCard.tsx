@@ -44,10 +44,11 @@ export default function PostListCard({ post, priority = false }: Props) {
         </p>
         {comments > 1 && (
           <button
-            className="font-bold my-2 text-sky-500"
+            className="font-bold my-2 text-sky-700"
             onClick={() => setOpenModal(true)}
           >{`View all ${comments} comments`}</button>
         )}
+        {/* 버튼 색이 background 색상과 비슷하다는 것 있었기 때문에 색상 수정 */}
       </ActionBar>
 
       {openModal && (
