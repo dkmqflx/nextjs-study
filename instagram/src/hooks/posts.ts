@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { Comment, SimplePost } from "@/model/post";
 import useSWR from "swr";
+import { useCacheKeys } from "@/context/CacheKeysContext";
 
 async function updateLike(id: string, like: boolean) {
   return fetch("/api/likes", {
@@ -17,12 +18,17 @@ async function addComment(id: string, comment: string) {
 }
 
 export default function usePosts() {
+  const cacheKeys = useCacheKeys();
+  // 상황에 따라 다른 cacheKey를 사용한다
+  // 즉, 이제 PostGrid에서는 Provider에서 value로 전달받은 cacheKey를 사용하기 때문에
+  // like 버튼을 클릭해도 정상적으로 업데이트가 되는 것
+
   const {
     data: posts,
     isLoading,
     error,
     mutate,
-  } = useSWR<SimplePost[]>("/api/posts");
+  } = useSWR<SimplePost[]>(cacheKeys.postsKey);
 
   const setLike = useCallback(
     (post: SimplePost, username: string, like: boolean) => {
