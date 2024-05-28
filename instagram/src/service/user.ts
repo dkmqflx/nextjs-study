@@ -68,7 +68,11 @@ export async function getUserForProfile(username: string) {
       "followers": count(followers),
       "posts": count(*[_type=="post" && author->username == "${username}"])
     }
-    `
+    `,
+      {},
+      {
+        cache: "no-store",
+      }
     )
     .then((user) => ({
       ...user,
